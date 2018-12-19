@@ -29,12 +29,14 @@ class Messages {
 
         if (found !== undefined) return;
 
+        const id = uuid();
+
         // TODO: Retry 3 times
         await knex('messages')
                 .insert({
-                    id: uuid(),
-                    message: message,
-                    digest: digest
+                    id,
+                    message,
+                    digest
                 })
     }
 
@@ -47,9 +49,7 @@ class Messages {
         console.log('Attempting to fetch message using digest');
 
         const message = await knex('messages')
-                                .where({
-                                    digest: digest
-                                })
+                                .where({ digest })
                                 .first();
 
         return message;

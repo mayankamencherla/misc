@@ -12,6 +12,7 @@ class MessageProcessor {
 
     /**
      * Returns a new instance of the class
+     * @return MessageProcessor
      */
     static Build() {
         return new MessageProcessor();
@@ -22,7 +23,7 @@ class MessageProcessor {
      * @param message
      * @return SHA256 Digest
      */
-    async process(message) {
+    async createDigest(message) {
         console.log('Processing the incoming message: ' + message);
 
         const secret = this.config.get('SHA_SECRET');

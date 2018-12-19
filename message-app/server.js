@@ -33,7 +33,7 @@ app.post('/messages', async (req, res) => {
         })
     } else {
 
-        const digest = await mp.process(req.body.message);
+        const digest = await mp.createDigest(req.body.message);
 
         res.json({
             success: true,
