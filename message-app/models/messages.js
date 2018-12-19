@@ -1,5 +1,6 @@
 const knex = require('knex')(require('./../knexfile'));
 const uuid = require('uuid/v1');
+const promiseRetry = require('promise-retry');
 
 /**
  * Wrapper class to interact with messages table
@@ -31,13 +32,29 @@ class Messages {
 
         const id = uuid();
 
-        // TODO: Retry 3 times
-        await knex('messages')
+        const callback = () => {
+
+            return knex('messages')
                 .insert({
                     id,
                     message,
                     digest
                 })
+        }
+
+        const options = {retries: 3};
+
+        try {
+            await promiseRetry((retry, number) => {
+
+                console.log(`Attempt ${number} of inserting into DB`);
+
+                return callback().catch(retry);
+            },
+            options);
+        } catch (e) {
+            console.log('Failed to insert message into DB');
+        }
     }
 
     /**
@@ -48,6 +65,7 @@ class Messages {
 
         console.log('Attempting to fetch message using digest');
 
+        // Returns the message row if found, else returns undefined
         const message = await knex('messages')
                                 .where({ digest })
                                 .first();
