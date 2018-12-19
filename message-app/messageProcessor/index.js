@@ -31,8 +31,6 @@ class MessageProcessor {
                            .update(message)
                            .digest('hex');
 
-        // TODO: Add to table
-        // TODO: Do this async instead of waiting here
         await this.messageModel.addDigest(message, hash);
 
         return hash;

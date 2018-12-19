@@ -24,9 +24,12 @@ class Messages {
 
         // TODO: Check if {message, digest} in cache
 
-        // TODO: Check if {message, digest} in table
+        // Check if {message, digest} in table
+        const found = await this.getMessage(digest);
 
-        // TODO: Retry 3 times - build a workflow class for this
+        if (found !== undefined) return;
+
+        // TODO: Retry 3 times
         await knex('messages')
                 .insert({
                     id: uuid(),
@@ -43,14 +46,11 @@ class Messages {
 
         console.log('Attempting to fetch message using digest');
 
-        const messageRow = await knex('messages')
+        const message = await knex('messages')
                                 .where({
                                     digest: digest
                                 })
                                 .first();
-
-        // TODO: Handle undefined
-        const message = messageRow.message;
 
         return message;
     }

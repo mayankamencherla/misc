@@ -56,13 +56,25 @@ app.get('/messages/:digest', async (req, res) => {
         })
     } else {
 
-        const message = await mp.getMessage(req.params.digest);
+        var messageRow = await mp.getMessage(req.params.digest);
 
-        // TODO: If message is undefined, return 404
+        var success = true;
+
+        let message;
+
+        if (messageRow == undefined) {
+            res.status(404);
+
+            success = false;
+
+            message = "Digest passed in request not found in server";
+        } else {
+            message = messageRow.message;
+        }
 
         res.json({
-            success: true,
-            message: message
+            success,
+            message
         });
     }
 });
