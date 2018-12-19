@@ -36,8 +36,9 @@ app.post('/messages', async (req, res) => {
         const digest = await mp.createDigest(req.body.message);
 
         res.json({
-            success: true,
-            digest : digest
+            success : true,
+            reusable: digest.success,
+            digest  : digest.hash
         });
     }
 });

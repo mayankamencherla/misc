@@ -32,9 +32,12 @@ class MessageProcessor {
                            .update(message)
                            .digest('hex');
 
-        await this.messageModel.addDigest(message, hash);
+        const success = await this.messageModel.addDigest(message, hash);
 
-        return hash;
+        return {
+            success,
+            hash
+        }
     }
 
     /**

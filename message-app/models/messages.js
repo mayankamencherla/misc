@@ -18,6 +18,7 @@ class Messages {
      * Adds a digest to the tabe
      * @param message
      * @param digest
+     * @return bool
      */
     async addDigest(message, digest) {
 
@@ -28,7 +29,7 @@ class Messages {
         // Check if {message, digest} in table
         const found = await this.getMessage(digest);
 
-        if (found !== undefined) return;
+        if (found !== undefined) return true;
 
         const id = uuid();
 
@@ -54,7 +55,11 @@ class Messages {
             options);
         } catch (e) {
             console.log('Failed to insert message into DB');
+
+            return false;
         }
+
+        return true;
     }
 
     /**
