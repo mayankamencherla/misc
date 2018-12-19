@@ -19,7 +19,7 @@ const mp = messageProcessor.Build();
  * @param req
  * @param res
  */
-app.post('/messages', (req, res) => {
+app.post('/messages', async (req, res) => {
 
     // TODO: Add more validations
     if (!req.body.hasOwnProperty('message')) {
@@ -33,7 +33,7 @@ app.post('/messages', (req, res) => {
         })
     } else {
 
-        const digest = mp.process(req.body.message);
+        const digest = await mp.process(req.body.message);
 
         res.json({
             success: true,
@@ -42,7 +42,7 @@ app.post('/messages', (req, res) => {
     }
 });
 
-app.get('/messages/:digest', (req, res) => {
+app.get('/messages/:digest', async (req, res) => {
 
     // TODO: Add more validations
     if (!req.params.hasOwnProperty('digest')) {
@@ -56,7 +56,9 @@ app.get('/messages/:digest', (req, res) => {
         })
     } else {
 
-        const message = mp.getMessage(req.params.digest);
+        const message = await mp.getMessage(req.params.digest);
+
+        // TODO: If message is undefined, return 404
 
         res.json({
             success: true,

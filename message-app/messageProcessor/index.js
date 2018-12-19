@@ -1,11 +1,14 @@
 const crypto = require('crypto');
 
-// Config
+// In built classes
+const Messages = require('../models/messages.js');
+
+// TODO: Config
 const secret = "cupcakes";
 
 class MessageProcessor {
     constructor() {
-
+        this.messageModel = Messages.Build();
     }
 
     /**
@@ -20,12 +23,16 @@ class MessageProcessor {
      * @param message
      * @return SHA256 Digest
      */
-    process(message) {
+    async process(message) {
         console.log('Processing the incoming message: ' + message);
 
         const hash = crypto.createHmac('sha256', secret)
                            .update(message)
                            .digest('hex');
+
+        // TODO: Add to table
+        // TODO: Do this async instead of waiting here
+        await this.messageModel.addDigest(message, hash);
 
         return hash;
     }
@@ -35,10 +42,10 @@ class MessageProcessor {
      * @param digest
      * @return message
      */
-    getMessage(digest) {
+    async getMessage(digest) {
         console.log('Fetching the message for digest: ' + digest);
 
-        const message = "foo";
+        const message = await this.messageModel.getMessage(digest);
 
         return message;
     }
