@@ -2,13 +2,12 @@ const crypto = require('crypto');
 
 // In built classes
 const Messages = require('../models/messages.js');
-
-// TODO: Config
-const secret = "cupcakes";
+const Configuration = require('../configuration');
 
 class MessageProcessor {
     constructor() {
         this.messageModel = Messages.Build();
+        this.config = Configuration.Build();
     }
 
     /**
@@ -25,6 +24,8 @@ class MessageProcessor {
      */
     async process(message) {
         console.log('Processing the incoming message: ' + message);
+
+        const secret = this.config.get('SHA_SECRET');
 
         const hash = crypto.createHmac('sha256', secret)
                            .update(message)
