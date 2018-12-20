@@ -125,43 +125,24 @@ vector<Item*> getClosestItems(vector<Item*>& prices, int balance)
     // There are not enough items, or the items of lowest value are too expensive
     if (prices.size() < 2 || prices[0]->getCost() + prices[1]->getCost() > balance) return res;
 
-    int best = 0;
+    int left = 0; int right = prices.size()-1;
 
-    for (int i=0; i<prices.size()-1; i++)
+    while (left < right)
     {
-        int target = balance - prices[i]->getCost();
+        int sum = prices[left]->getCost() + prices[right]->getCost();
 
-        int left = i+1; int right = prices.size()-1;
+        if (sum == balance) return {prices[left], prices[right]};
 
-        while (left <= right)
+        else if (sum < balance)
         {
-            int mid = (left + right)/2;
+            res = {prices[left], prices[right]};
 
-            int p = prices[mid]->getCost();
+            left++;
+        }
 
-            // We found a way to buy 2 items for the entire balance amount
-            if (p == target) return {prices[i], prices[mid]};
-
-            else if (p < target)
-            {
-                int solution = prices[i]->getCost() + prices[mid]->getCost();
-
-                // We found a solution within the budget that is closer to the budget
-                if (best < solution)
-                {
-                    best = solution;
-
-                    res = {prices[i], prices[mid]};
-                }
-
-                left = mid+1;
-            }
-
-            else
-            {
-                // There exists no solution from {mid, right}
-                right = mid-1;
-            }
+        else
+        {
+            right--;
         }
     }
 
