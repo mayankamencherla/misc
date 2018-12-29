@@ -15,7 +15,7 @@ class Messages {
     }
 
     /**
-     * Adds a digest to the tabe
+     * Adds a digest to the table
      * @param message
      * @param digest
      * @return bool
