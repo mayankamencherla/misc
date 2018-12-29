@@ -10,6 +10,10 @@ class Messages {
 
     }
 
+    /**
+     * Returns a new instance of the Messages class
+     * @return Messages
+     */
     static Build() {
         return new Messages();
     }
