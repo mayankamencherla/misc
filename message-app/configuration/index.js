@@ -9,6 +9,7 @@ class Configuration {
 
     /**
      * Returns a new instance of this class
+     * @return Configuration
      */
     static Build() {
         return new Configuration();
